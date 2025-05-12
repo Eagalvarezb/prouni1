@@ -14,7 +14,10 @@ public class Proyecto1 {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        System.out.println("Hola Mundo");
+        int i = 5;
+        if (i==5){
+            System.out.println("Hola Mundo");
+        }
     }
     
 }

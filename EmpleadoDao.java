@@ -134,7 +134,7 @@ public class EmpleadoDao {
     }
 
     public class Validador {
-    // Validación de teléfono (México como ejemplo)
+    
     public static boolean validarTelefono(String telefono) {
         String numerolimpio = telefono.replaceAll("[\\s\\-()+]","");
         String regex = "^(\\+?520|520)?(2-8)\\d{7}$";

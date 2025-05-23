@@ -26,8 +26,10 @@ public class DAO {
                     Modelo producto = new Modelo(
                     rs.getInt("id"),
                     rs.getString("nombre"),
+                    rs.getString("descripcion"),
                     rs.getInt("cantidad"),
-                    rs.getDouble("precio")
+                    rs.getDouble("precio"),
+                    rs.getString("categoria")
                     );
                     lista.add(producto);
                  }
@@ -39,13 +41,15 @@ public class DAO {
             return lista;
     }
     public boolean insertar(Modelo producto){
-        String sql = "INSERT INTO producto (nombre, cantidad, precio) VALUES (?,?,?)";
+        String sql = "INSERT INTO producto (nombre, descripcion, cantidad, precio, categoria) VALUES (?,?,?,?,?)";
         
         try(Connection conn = connFactory.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql)){
             ps.setString(1, producto.getProduct_name());
-            ps.setInt(2, producto.getCantidad());
-            ps.setDouble(3, producto.getProduct_price());
+            ps.setString(2, producto.getDescription());
+            ps.setInt(3, producto.getCantidad());
+            ps.setDouble(4, producto.getProduct_price());
+            ps.setString(5, producto.getCategory());
             
             ps.executeUpdate();
             ps.close();
@@ -58,14 +62,16 @@ public class DAO {
     }
     
     public boolean actualizar(Modelo producto){
-       String sql = "UPDATE producto SET nombre=?, cantidad=?, precio=? WHERE id=?";
+       String sql = "UPDATE producto SET nombre=?, descripcion=?, cantidad=?, precio=?, categoria=? WHERE id=?";
         
         try(Connection conn = connFactory.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql)){
             ps.setString(1, producto.getProduct_name());
-            ps.setInt(2, producto.getCantidad());
-            ps.setDouble(3, producto.getProduct_price());
-            ps.setInt(4, producto.getId_product());
+            ps.setString(2, producto.getDescription());
+            ps.setInt(3, producto.getCantidad());
+            ps.setDouble(4, producto.getProduct_price());
+            ps.setString(5, producto.getCategory());
+            ps.setInt(6, producto.getId_product());
             
             ps.executeUpdate();
             ps.close();

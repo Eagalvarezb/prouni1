@@ -10,21 +10,27 @@ package gestionProductosModelo;
 public class Modelo {
     private int id_product;
     private String product_name;
+    private String description;
     private int cantidad;
     private double product_price;
+    private String category;
 
     public Modelo() {
         this.id_product = 0;
         this.product_name = "";
+        this.description = "";
         this.cantidad = 0;
         this.product_price = 0.0;
+        this.category = "";
     }
 
-    public Modelo(int id_product, String product_name, int cantidad, double product_price) {
+    public Modelo(int id_product, String product_name, String description, int cantidad, double product_price, String category) {
         this.id_product = id_product;
         this.product_name = product_name;
+        this.description = description;
         this.cantidad = cantidad;
         this.product_price = product_price;
+        this.category = category;
     }
 
     public int getId_product() {
@@ -57,6 +63,22 @@ public class Modelo {
 
     public void setProduct_price(double product_price) {
         this.product_price = product_price;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
     
 }

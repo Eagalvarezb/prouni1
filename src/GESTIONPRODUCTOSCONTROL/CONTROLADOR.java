@@ -20,13 +20,13 @@ public class CONTROLADOR {
         return dao.obtenerTodos();
     }
     
-    public void insertarPedido (String nombre, int cantidad, double precio){
-        Modelo producto = new Modelo(0, nombre, cantidad, precio);
+    public void insertarPedido (String product_name, String description, int cantidad, double product_price, String category){
+        Modelo producto = new Modelo(0, product_name, description, cantidad, product_price, category);
         dao.insertar(producto);
     }
     
-    public void actualizarPedido (int id, String nombre, int cantidad, double precio){
-        Modelo producto = new Modelo(0, nombre, cantidad, precio);
+    public void actualizarPedido (int id_product, String product_name, String description, int cantidad, double product_price, String category){
+        Modelo producto = new Modelo(id_product, product_name, description, cantidad, product_price, category);
         dao.actualizar(producto);
     }
 }

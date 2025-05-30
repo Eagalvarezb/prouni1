@@ -64,7 +64,7 @@ public class ProveedorJinterno extends javax.swing.JFrame {
         lblBackenddelSabor.setFont(new java.awt.Font("Segoe UI Emoji", 1, 24)); // NOI18N
         lblBackenddelSabor.setForeground(new java.awt.Color(0, 0, 0));
         lblBackenddelSabor.setText("Backend del sabor");
-        jPanel1.add(lblBackenddelSabor, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 40, -1, -1));
+        jPanel1.add(lblBackenddelSabor, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 40, -1, -1));
 
         lblNomProveedor.setFont(new java.awt.Font("Segoe UI Emoji", 1, 14)); // NOI18N
         lblNomProveedor.setForeground(new java.awt.Color(0, 0, 153));

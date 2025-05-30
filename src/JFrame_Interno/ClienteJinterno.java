@@ -29,7 +29,6 @@ public class ClienteJinterno extends javax.swing.JFrame {
         jDesktopPane1 = new javax.swing.JDesktopPane();
         jPanel2 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        lblLogo = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         lblNombre = new javax.swing.JLabel();
         lblApellido = new javax.swing.JLabel();
@@ -51,65 +50,58 @@ public class ClienteJinterno extends javax.swing.JFrame {
         setTitle("Clientes Frecuentes");
 
         jPanel2.setBackground(new java.awt.Color(204, 204, 0));
+        jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel2.setFont(new java.awt.Font("Segoe UI Emoji", 1, 24)); // NOI18N
         jLabel2.setForeground(new java.awt.Color(0, 0, 0));
         jLabel2.setText("Nuestros Taqueros Favoritos");
-
-        lblLogo.setIcon(new javax.swing.ImageIcon("C:\\Users\\Gabriela\\Documents\\NetBeansProjects\\Proyecto_Final\\src\\img\\logo.png")); // NOI18N
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addComponent(lblLogo)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel2)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(lblLogo, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(100, 100, 100)
-                .addComponent(jLabel2))
-        );
+        jPanel2.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 30, 370, 30));
 
         jPanel3.setBackground(new java.awt.Color(215, 182, 36));
+        jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         lblNombre.setBackground(new java.awt.Color(204, 204, 0));
         lblNombre.setFont(new java.awt.Font("Segoe UI Emoji", 1, 14)); // NOI18N
         lblNombre.setForeground(new java.awt.Color(0, 51, 204));
         lblNombre.setText("Nombre:");
+        jPanel3.add(lblNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 50, 71, -1));
 
         lblApellido.setFont(new java.awt.Font("Segoe UI Emoji", 1, 12)); // NOI18N
         lblApellido.setForeground(new java.awt.Color(0, 0, 153));
         lblApellido.setText("Apellido:");
+        jPanel3.add(lblApellido, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 100, 59, -1));
 
         lblTelefono.setFont(new java.awt.Font("Segoe UI Emoji", 1, 12)); // NOI18N
         lblTelefono.setForeground(new java.awt.Color(0, 51, 204));
         lblTelefono.setText("Telefono:");
+        jPanel3.add(lblTelefono, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 140, 59, -1));
 
         lblCorreoElectronico.setFont(new java.awt.Font("Segoe UI Emoji", 1, 12)); // NOI18N
         lblCorreoElectronico.setForeground(new java.awt.Color(0, 0, 153));
         lblCorreoElectronico.setText("Correo Electronico:");
+        jPanel3.add(lblCorreoElectronico, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 180, 115, -1));
 
         lblDireccion.setFont(new java.awt.Font("Segoe UI Emoji", 1, 12)); // NOI18N
         lblDireccion.setForeground(new java.awt.Color(0, 51, 204));
         lblDireccion.setText("Dieccion:");
+        jPanel3.add(lblDireccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 230, 61, -1));
 
         lblDpi.setFont(new java.awt.Font("Segoe UI Emoji", 1, 12)); // NOI18N
         lblDpi.setForeground(new java.awt.Color(0, 0, 153));
         lblDpi.setText("DPI:");
+        jPanel3.add(lblDpi, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 270, 37, -1));
 
         txtNombre.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtNombreActionPerformed(evt);
             }
         });
+        jPanel3.add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 50, 260, -1));
+        jPanel3.add(txtApellido, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 90, 255, -1));
+        jPanel3.add(txtTelefono, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 130, 255, -1));
+        jPanel3.add(txtCorreoElectronico, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 180, 255, -1));
+        jPanel3.add(txtDireccion, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 220, 255, -1));
+        jPanel3.add(txtDpi, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 260, 239, -1));
 
         btnSave.setBackground(new java.awt.Color(102, 255, 102));
         btnSave.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
@@ -120,6 +112,7 @@ public class ClienteJinterno extends javax.swing.JFrame {
                 btnSaveActionPerformed(evt);
             }
         });
+        jPanel3.add(btnSave, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 340, 96, -1));
 
         btnDelete.setBackground(new java.awt.Color(255, 153, 51));
         btnDelete.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
@@ -130,6 +123,7 @@ public class ClienteJinterno extends javax.swing.JFrame {
                 btnDeleteActionPerformed(evt);
             }
         });
+        jPanel3.add(btnDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 330, 94, 42));
 
         btnReturn.setBackground(new java.awt.Color(0, 204, 204));
         btnReturn.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
@@ -140,80 +134,7 @@ public class ClienteJinterno extends javax.swing.JFrame {
                 btnReturnActionPerformed(evt);
             }
         });
-
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(27, 27, 27)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addComponent(lblNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPanel3Layout.createSequentialGroup()
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                        .addComponent(lblTelefono, javax.swing.GroupLayout.DEFAULT_SIZE, 59, Short.MAX_VALUE)
-                                        .addComponent(lblApellido, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                    .addComponent(lblCorreoElectronico, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(lblDireccion, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(lblDpi, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(19, 19, 19)
-                                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                    .addComponent(txtDireccion, javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtCorreoElectronico, javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtApellido, javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(txtTelefono, javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel3Layout.createSequentialGroup()
-                                        .addComponent(txtDpi, javax.swing.GroupLayout.PREFERRED_SIZE, 239, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(0, 0, Short.MAX_VALUE)))))
-                        .addGap(194, 194, 194))
-                    .addGroup(jPanel3Layout.createSequentialGroup()
-                        .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 96, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(73, 73, 73)
-                        .addComponent(btnReturn, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(71, 71, 71)
-                        .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))))
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(15, 15, 15)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblNombre)
-                    .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblApellido)
-                    .addComponent(txtApellido, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(16, 16, 16)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblTelefono)
-                    .addComponent(txtTelefono, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblCorreoElectronico)
-                    .addComponent(txtCorreoElectronico, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblDireccion)
-                    .addComponent(txtDireccion, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtDpi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblDpi))
-                .addGap(45, 45, 45)
-                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnSave)
-                    .addComponent(btnReturn)
-                    .addComponent(btnDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(130, Short.MAX_VALUE))
-        );
+        jPanel3.add(btnReturn, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 340, 98, -1));
 
         jDesktopPane1.setLayer(jPanel2, javax.swing.JLayeredPane.DEFAULT_LAYER);
         jDesktopPane1.setLayer(jPanel3, javax.swing.JLayeredPane.DEFAULT_LAYER);
@@ -361,7 +282,6 @@ btnReturn.addActionListener(new java.awt.event.ActionListener() {
     private javax.swing.JLabel lblCorreoElectronico;
     private javax.swing.JLabel lblDireccion;
     private javax.swing.JLabel lblDpi;
-    private javax.swing.JLabel lblLogo;
     private javax.swing.JLabel lblNombre;
     private javax.swing.JLabel lblTelefono;
     private javax.swing.JTextField txtApellido;

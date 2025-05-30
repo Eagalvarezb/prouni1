@@ -20,12 +20,9 @@ public class ClienteController {
         return dao.obtenerTodos();
     }
     
-    public Cliente obtenerPorID(int dpi){
+    public Cliente obtenerPorID(long dpi){
         try{
-        if(dpi <=0){
-            System.out.println("Error: DPI no valido" );
-            return null;
-             }
+       
         return dao.obtenerPorDPI(dpi);
         }catch(Exception e){
             System.out.println("Erro al buscar Cliente: "+e.getMessage());  
@@ -33,8 +30,8 @@ public class ClienteController {
         }
     }
     
-    public void agregarCliente(int dpi,String nombre,String telefono, String direccion,String email){
-        Cliente cli = new Cliente(0, nombre, telefono, direccion, email);
+    public void agregarCliente(long dpi, String nombre, String telefono, String direccion, String email){
+        Cliente cli = new Cliente(dpi, nombre, telefono, direccion, email);
         
         if(cli.getNombre() == null) {
             System.out.println("Nombre es requerido");            
@@ -46,18 +43,33 @@ public class ClienteController {
         dao.guardar(cli);
     }
     
-    public void actualizarCliente(int dpi,String nombre,String telefono, String direccion,String email){
-        Cliente cli = new Cliente(dpi, nombre, telefono, direccion,email);
-        if (cli == null) {
-            System.err.println("Error: Cliente no encontrado");
-        }
-          cli.setPuntos(cli.getPuntos());
-        cli.setNivel(cli.getNivel());
-        cli.setFecha_res(cli.getFecha_res());
-        
-        dao.actualizar(cli);
-    }  
-     public boolean registroClienteFre(int dpi, double monto) {
+    public void actualizarCliente(long dpi, String nombre, String telefono, String direccion, String email) {
+    Cliente cli = dao.obtenerPorDPI(dpi);
+    if (cli == null) {
+        System.err.println("Error: Cliente no encontrado");
+        return;
+    }
+    
+    // Actualizar solo los campos que no son nulos o vacíos
+    if (nombre != null && !nombre.isEmpty()) {
+        cli.setNombre(nombre);
+    }
+    if (telefono != null && !telefono.isEmpty()) {
+        cli.setTelefono(telefono);
+    }
+    if (direccion != null && !direccion.isEmpty()) {
+        cli.setDireccion(direccion);
+    }
+    if (email != null && !email.isEmpty()) {
+        cli.setEmail(email);
+    }
+    
+    boolean success = dao.actualizar(cli);
+    if (!success) {
+        System.err.println("Error al actualizar cliente");
+    }
+} 
+     public boolean registroClienteFre(long dpi, double monto) {
         if (dpi <= 0 || monto <= 0) {
             System.err.println("Error: DPI y monto deben ser valores positivos");
             return false;

@@ -5,7 +5,6 @@
 package DAO;
 import Conexion.CreateConection;
 import Modelo.Cliente;
-import Modelo.Empleado;
 
 import java.sql.*;
 import java.util.regex.Pattern;
@@ -26,7 +25,7 @@ public class ClienteDao {
     
  public List<Cliente> obtenerTodos() {
         List<Cliente> lista = new ArrayList<>();
-        String sql = "SELECT * FROM cliente";
+        String sql = "SELECT * FROM public.cliente";
        
         try (Connection conn = connFactory.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql);
@@ -34,7 +33,7 @@ public class ClienteDao {
 
             while (rs.next()) {
                 Cliente cli = new Cliente(
-                        rs.getInt("DPI"),
+                        rs.getLong("DPI"),
                         rs.getString("nombre"),
                        // rs.getString("apellido"),
                         rs.getString("telefono"),
@@ -55,29 +54,31 @@ public class ClienteDao {
         return lista;
     }
  
- public Cliente obtenerPorDPI(int dpi) {
+ public Cliente obtenerPorDPI(long dpi) {
 
-        String sql = "SELECT * FROM cliente Where dpi=?";
+        String sql = "SELECT * FROM public.cliente Where dpi=?";
         Cliente  cli= null;
         
         try (Connection conn = connFactory.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
-             ps.setInt(1,dpi);
-             
-            while (rs.next()) {
-               cli =new Cliente(
-                    rs.getInt("dpi"),
-                    rs.getString("nombre"),
-                    //rs.getString("apellido");
-                    rs.getString("telefono"),
-                    rs.getString("direccion"),
-                    rs.getString("email")
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+             ps.setLong(1,dpi);
+              
+            try(ResultSet re = ps.executeQuery()){
+                if(re.next()){
+                 cli =new Cliente(
+                    re.getLong("dpi"),
+                    re.getString("nombre"),
+                    //re.getString("apellido");
+                    re.getString("telefono"),
+                    re.getString("direccion"),
+                    re.getString("email")
                    );
-               cli.setPuntos(rs.getInt("puntos"));
-                cli.setFecha_res(rs.getDate("fecha_res")!= null ? rs.getDate("fecha_res").toLocalDate() : null);
-                cli.setNivel((rs.getString("nivel")));
+               cli.setPuntos(re.getInt("puntos"));
+                cli.setFecha_res(re.getDate("fecha_res")!= null ? re.getDate("fecha_res").toLocalDate() : null);
+                cli.setNivel((re.getString("nivel")));
+                }
             }
+
              ps.close();
             conn.close();
         } catch (SQLException e) {
@@ -88,16 +89,21 @@ public class ClienteDao {
     }
  
     public boolean guardar(Cliente cli) {
-        
-        if (!Validador.validarTelefono(cli.getTelefono()) || !Validador.validarDireccion(cli.getDireccion()) ||!Validador.validarEmail(cli.getEmail())) {
-            return false;
-        }
+    if (
+        !Validador.validarTelefono(cli.getTelefono()) || 
+        !Validador.validarDireccion(cli.getDireccion()) || 
+        !Validador.validarEmail(cli.getEmail())) {
+        return false;
+    }
+    if (cli.getFecha_res() == null) {
+        return false;
+    }
      
-        String sql = "INSERT INTO cliente (dpi, nombre, telefono, direccion, email, puntos, fecha_res, nivel) VALUES (?, ?, ?, ?, ?,?,?,?)";
+        String sql = "INSERT INTO public.cliente (dpi, nombre, telefono, direccion, email, puntos, fecha_res, nivel) VALUES (?, ?, ?, ?, ?,?,?,?)";
              
         try (Connection conn = connFactory.getConnection();
             PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setInt(1, cli.getDpi());
+            ps.setLong(1, cli.getDpi());
             ps.setString(2, cli.getNombre());
             //ps.setString(3, emp.getApellido());
             ps.setString(3, cli.getTelefono());
@@ -122,9 +128,7 @@ public class ClienteDao {
 
     public class Validador {
     
-    public  static boolean validarLongitudDPI(String dpi) {
-    return dpi != null && dpi.matches("\\d{13}");
-    }
+   
 
     public static boolean validarTelefono(String telefono) {
        
@@ -145,14 +149,14 @@ public class ClienteDao {
     }
 }
     
-public boolean actualizarPuntos(int dpi, int puntos) {
-        String sql = "UPDATE cliente SET puntos=? WHERE dpi=?";
+public boolean actualizarPuntos(long dpi, int puntos) {
+        String sql = "UPDATE public.cliente SET puntos=? WHERE dpi=?";
         
         try (Connection conn = connFactory.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             
             ps.setInt(1, puntos);
-            ps.setInt(2, dpi);
+            ps.setLong(2, dpi);
             
             int rowsAffected = ps.executeUpdate();
             return rowsAffected > 0;
@@ -163,14 +167,14 @@ public boolean actualizarPuntos(int dpi, int puntos) {
         return false;
 }
 
- public boolean actualizarNivel(int dpi, String nivel) {
-        String sql = "UPDATE cliente SET nivel=? WHERE dpi=?";
+ public boolean actualizarNivel(Long dpi, String nivel) {
+        String sql = "UPDATE public.cliente SET nivel=? WHERE dpi=?";
         
         try (Connection conn = connFactory.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
             
             ps.setString(1, nivel);
-            ps.setInt(2, dpi);
+            ps.setLong(2, dpi);
             
             int rowsAffected = ps.executeUpdate();
             return rowsAffected > 0;
@@ -187,68 +191,88 @@ private String determinarNivel(int puntos) {
         return "Bronce";
 }
 
-public boolean registrodeClientesfrecuentes(int dpi, double montoCompra) {
+public boolean registrodeClientesfrecuentes(long dpi, double montoCompra) {
+    Connection conn = null;
+    try {
+        conn = connFactory.getConnection();
+        conn.setAutoCommit(false); 
+        
         Cliente cliente = obtenerPorDPI(dpi);
         if (cliente == null) return false;
        
         int puntosGanados = (int) (montoCompra / 10);
         int nuevosPuntos = cliente.getPuntos() + puntosGanados;
-        
         String nuevoNivel = determinarNivel(nuevosPuntos);
-      
-        try {
-            boolean puntosActualizados = actualizarPuntos(dpi, nuevosPuntos);
-            boolean nivelActualizado = actualizarNivel(dpi, nuevoNivel);
-            return puntosActualizados && nivelActualizado;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
+        
+        String sqlPuntos = "UPDATE public.cliente SET puntos=? WHERE dpi=?";
+        try (PreparedStatement ps = conn.prepareStatement(sqlPuntos)) {
+            ps.setInt(1, nuevosPuntos);
+            ps.setLong(2, dpi);
+            ps.executeUpdate();
         }
+        
+        String sqlNivel = "UPDATE public.cliente SET nivel=? WHERE dpi=?";
+        try (PreparedStatement ps = conn.prepareStatement(sqlNivel)) {
+            ps.setString(1, nuevoNivel);
+            ps.setLong(2, dpi);
+            ps.executeUpdate();
+        }
+        
+        conn.commit();
+        return true;
+    } catch (SQLException e) {
+        if (conn != null) {
+            try {
+                conn.rollback();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+        e.printStackTrace();
+        return false;
+    } finally {
+        if (conn != null) {
+            try {
+                conn.setAutoCommit(true);
+                conn.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }
-    
  
  public boolean actualizar(Cliente cli) {
-     Cliente cliente = obtenerPorDPI(cli.getDpi());
-     if (!Validador.validarTelefono(cli.getTelefono()) || !Validador.validarDireccion(cli.getDireccion()) ||!Validador.validarEmail(cli.getEmail())) {
-            return false;
-     }
-        
-    if (cli.getNombre() != null) {
-        cliente.setNombre(cli.getNombre());
-    }
-    /*if (emp.getApellido() != null) {
-        empleadoe.setApellido(emp.getApellido());
-    }*/
-    if (cli.getTelefono() != null) {
-        cliente.setTelefono(cli.getTelefono());
-    }
-    if (cli.getDireccion() != null) {
-        cliente.setDireccion(cli.getDireccion());
-    }
-    if (cli.getEmail() != null) {
-        cliente.setEmail(cli.getEmail());
-    }
-       
-    String sql = "UPDATE cliente SET telefono=?, direccion=?, email=? WHERE dpi=?";
-//    //teléfono, direccion, email
-        try (Connection conn = connFactory.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql)) {
-            //ps.setString(1, cli.getApellido());
-            ps.setString(1, cli.getTelefono());
-            ps.setString(2, cli.getDireccion());
-            ps.setString(3,cli.getEmail());
-            ps.setInt(4, cli.getDpi());
-      
-            ps.executeUpdate();
-            
-            ps.close();
-            conn.close();
-            return true;
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
+    // Validar solo los campos que se están actualizando
+    if (cli.getTelefono() != null && !Validador.validarTelefono(cli.getTelefono())) {
         return false;
     }
+    if (cli.getDireccion() != null && !Validador.validarDireccion(cli.getDireccion())) {
+        return false;
+    }
+    if (cli.getEmail() != null && !Validador.validarEmail(cli.getEmail())) {
+        return false;
+    }
+        
+    String sql = "UPDATE public.cliente SET nombre=COALESCE(?, nombre), telefono=COALESCE(?, telefono), " +
+                 "direccion=COALESCE(?, direccion), email=COALESCE(?, email) WHERE dpi=?";
+    
+    try (Connection conn = connFactory.getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+        
+        // Usamos setObject para manejar posibles valores nulos
+        ps.setObject(1, cli.getNombre(), Types.VARCHAR);
+        ps.setObject(2, cli.getTelefono(), Types.VARCHAR);
+        ps.setObject(3, cli.getDireccion(), Types.VARCHAR);
+        ps.setObject(4, cli.getEmail(), Types.VARCHAR);
+        ps.setLong(5, cli.getDpi());
+  
+        int rowsUpdated = ps.executeUpdate();
+        return rowsUpdated > 0;
+
+    } catch (SQLException e) {
+        e.printStackTrace();
+        return false;
+    }
+}
 }

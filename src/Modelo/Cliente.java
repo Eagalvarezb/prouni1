@@ -12,7 +12,7 @@ import java.time.LocalDate;
  */
 public class Cliente {
     //nombre,dpi, teléfono, direccion, email
-    private int dpi;
+    private long dpi;
     private String nombre;
     private String telefono;
     private String direccion;
@@ -32,7 +32,7 @@ public Cliente (){
         this.nivel="";
 }
 
-public Cliente(int dpi, String nombre, String telefono, String direccion, String email){
+public Cliente(long dpi, String nombre, String telefono, String direccion, String email){
     this.dpi=dpi;
     this.nombre=nombre;
     this.telefono=telefono;
@@ -43,11 +43,11 @@ public Cliente(int dpi, String nombre, String telefono, String direccion, String
     this.nivel=nivel;
 }
 
-    public int getDpi() {
+    public long getDpi() {
         return dpi;
     }
 
-    public void setDpi(int dpi) {
+    public void setDpi(long dpi) {
         this.dpi = dpi;
     }
 

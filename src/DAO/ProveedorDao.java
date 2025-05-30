@@ -25,7 +25,7 @@ public class ProveedorDao {
 //   (Insumos de Limpieza y Mantenimiento,Insumos de Empaque y Servicio,Insumos de Cocina (Utensilios y Equipo),Insumos Alimenticios (Materia Prima))
  public List<Proveedor> obtenerTodos() {
         List<Proveedor> lista = new ArrayList<>();
-        String sql = "SELECT * FROM proveedor";
+        String sql = "SELECT * FROM public.proveedor";
        
         try (Connection conn = connFactory.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql);
@@ -55,24 +55,25 @@ public class ProveedorDao {
  
  public Proveedor obtenerPorNIT(int nit) {
 
-        String sql = "SELECT * FROM proveedor Where nit=?";
+        String sql = "SELECT * FROM public.proveedor Where nit=?";
         Proveedor pro= null;
         
         try (Connection conn = connFactory.getConnection();
-             PreparedStatement ps = conn.prepareStatement(sql);
-             ResultSet rs = ps.executeQuery()) {
+             PreparedStatement ps = conn.prepareStatement(sql)) {
              ps.setInt(1,nit);
-
-            while (rs.next()) {
-               
-                        rs.getInt("nit");
-                        rs.getString("nombre_pro");
-                        rs.getString("tipo_insumo");
-                        rs.getString("contacto");
-                        rs.getString("direcccion");
-                        rs.getString("telefono_emp");
-                        rs.getString("telefono_con");
+        try(ResultSet rs = ps.executeQuery()){
+            if(rs.next()) {
+                pro=new Proveedor(
+                rs.getString("nombre_pro"),
+                rs.getInt("nit"),
+                rs.getString("tipo_insumo"),
+                rs.getString("contacto"),
+                rs.getString("direccion"),
+                rs.getString("telefono_emp"),
+                rs.getString("telefono_con")
+                );
             }
+        }
              ps.close();
             conn.close();
         } catch (SQLException e) {
@@ -82,11 +83,14 @@ public class ProveedorDao {
 
     }
     public boolean guardar(Proveedor pro) {
-        if (!ProveedorDao.Validador.validarTelefono(pro.getTelefono_emp(), pro.getTelefono_con()) || !ProveedorDao.Validador.validarDireccion(pro.getDireccion())) {
-            return false;
-        }
+    if (!ProveedorDao.Validador.validarLongitudNIT(String.valueOf(pro.getNit())) || 
+       !ProveedorDao.Validador.validarTelefono(pro.getTelefono_emp(), pro.getTelefono_con()) || 
+       !ProveedorDao.Validador.validarDireccion(pro.getDireccion())) {
+        return false;
+    }
+    
         
-        String sql = "INSERT INTO proveedor (nombre_pro, nit,tipo_insummo, contacto, direccion,telefono_emp, telefono_conl) VALUES (?, ?, ?, ?, ?, "
+        String sql = "INSERT INTO public.proveedor (nombre_pro, nit,tipo_insumo, contacto, direccion,telefono_emp, telefono_con) VALUES (?, ?, ?, ?, ?, "
                 + "?, ?)";
                  
         try (Connection conn = connFactory.getConnection();
@@ -145,31 +149,31 @@ public class ProveedorDao {
 }
     
     public boolean actualizar(Proveedor pro) {
-        Proveedor proveedor = obtenerPorNIT(pro.getNit());
-         if (!ProveedorDao.Validador.validarTelefono(pro.getTelefono_emp(), pro.getTelefono_con()) || !ProveedorDao.Validador.validarDireccion(pro.getDireccion())) {
-            return false;
-        }
+    if (!ProveedorDao.Validador.validarTelefono(pro.getTelefono_emp(), pro.getTelefono_con()) || 
+        !ProveedorDao.Validador.validarDireccion(pro.getDireccion())) {
+        return false;
+    }
     if (pro.getNombre_pro() != null) {
-        proveedor.setNombre_pro(pro.getNombre_pro());
+        pro.setNombre_pro(pro.getNombre_pro());
     }
     if (pro.getContacto() != null) {
-        proveedor.setContacto(pro.getContacto());
+        pro.setContacto(pro.getContacto());
     }
     if (pro.getDireccion()!= null) {
-        proveedor.setDireccion(pro.getDireccion());
+        pro.setDireccion(pro.getDireccion());
     }
     if (pro.getTipo_insumo()!= null) {
-        proveedor.setTipo_insumo(pro.getTipo_insumo());
+        pro.setTipo_insumo(pro.getTipo_insumo());
     }
     if (pro.getTelefono_emp()!= null) {
-        proveedor.setTelefono_emp(pro.getTelefono_emp());
+        pro.setTelefono_emp(pro.getTelefono_emp());
     }
     if (pro.getTelefono_con()!= null) {
-        proveedor.setTelefono_con(pro.getTelefono_con());
+        pro.setTelefono_con(pro.getTelefono_con());
     }
     
        
-        String sql = "UPDATE proveedor SET tipo_insumo=?, contacto=?, direccion=?, telefono_emp=?, telefono_con=? WHERE nit=?";
+        String sql = "UPDATE public.proveedor SET tipo_insumo=?, contacto=?, direccion=?, telefono_emp=?, telefono_con=? WHERE nit=?";
 
         try (Connection conn = connFactory.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -194,7 +198,7 @@ public class ProveedorDao {
     }
 
     public boolean eliminar(int nit) {
-        String sql = "DELETE FROM proveedor WHERE nit=?";
+        String sql = "DELETE FROM public.proveedor WHERE nit=?";
 
         try (Connection conn = connFactory.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {

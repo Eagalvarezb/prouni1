@@ -31,7 +31,7 @@ public class EmpleadoController {
         }
     }
     
-    public void agregarEmpleado(int id,String nombre, String apellido, String puesto,String telefono, String direccion, String estado, String fecha_in, double salario,String email){
+    public void agregarEmpleado(String nombre, String apellido, String puesto,String telefono, String direccion, String estado, String fecha_in, double salario,String email){
         Empleado emp = new Empleado(0, nombre, apellido,puesto,telefono, direccion, estado, fecha_in,salario,email);
         if(emp.getNombre() == null) {
             System.out.println("Nombre es requerido");

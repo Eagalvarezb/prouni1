@@ -222,9 +222,9 @@ private PedidosController pedidoController;
  StringBuilder resumen = new StringBuilder("Productos en tu pedido:\n");
     for (Productos p : pedidoController.getProductosSeleccionados()) {
         resumen.append("- ").append(p.getNombre())
-               .append(" $").append(p.getPrecio()).append("\n");
+               .append(" Q").append(p.getPrecio()).append("\n");
     }
-    resumen.append("\nTotal: $").append(pedidoController.getTotal());
+    resumen.append("\nTotal: Q").append(pedidoController.getTotal());
     
     JOptionPane.showMessageDialog(
         this, 

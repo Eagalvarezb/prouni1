@@ -26,7 +26,7 @@ public class EmpleadoController {
              }
         return dao.obtenerPorID(id);
         }catch(Exception e){
-            System.out.println("Erro al buscar emleado: "+e.getMessage());  
+            System.out.println("Erro al buscar empleado: "+e.getMessage());  
             return null;
         }
     }

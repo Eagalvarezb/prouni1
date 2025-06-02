@@ -33,7 +33,7 @@ public class Menu2 extends javax.swing.JInternalFrame{
         this.setMaximizable(true);
         this.setIconifiable(true);
         this.setResizable(true);
-        this.setVisible(true);
+        this.setSize(900,700);
 //        this.Imagen(this.LblImgaen, "src/Img/2.png");
 //        this.Imagen(this.LblImgaen1, "src/Img/1.png");
 //        this.Imagen(this.LblImgaen2, "src/Img/Tacos.png");
@@ -48,7 +48,7 @@ public class Menu2 extends javax.swing.JInternalFrame{
        BtnPerso.addActionListener(e -> abrirMenuPersonales());
         jButton4.addActionListener(e -> abrirMenuCombos());
         jButton3.addActionListener(e -> abrirMenuExtras());
-     //  Pago.addActionListener(e -> abrirPago());  //mejor lo agrego en otro lugar
+        btnPago.addActionListener(e -> abrirPago());  //mejor lo agrego en otro lugar
     }
      
      @Override
@@ -68,6 +68,7 @@ public class Menu2 extends javax.swing.JInternalFrame{
     private void abrirMenuPersonales() {
         try {
             MenuPersonales menuPersonales = new MenuPersonales(pedidoController);
+             menuPersonales.setSize(740, 550);
             getParent().add(menuPersonales);
             menuPersonales.setVisible(true);
             menuPersonales.toFront();
@@ -81,6 +82,7 @@ public class Menu2 extends javax.swing.JInternalFrame{
    private void abrirMenuCombos() {
         try {
             MenuCombos menuCombos = new MenuCombos(pedidoController);
+            menuCombos.setSize(810, 600);
             JInternalFrame internalFrame = new JInternalFrame("Combos", true, true, true, true);
             internalFrame.setContentPane(menuCombos.getContentPane());
             internalFrame.pack();
@@ -94,9 +96,34 @@ public class Menu2 extends javax.swing.JInternalFrame{
         }
     }
    
+   private void abrirPago() {
+        try {
+              if (pedidoController.getProductosSeleccionados().isEmpty()) {
+            JOptionPane.showMessageDialog(this, 
+                "No hay productos en el pedido para pagar", 
+                "Pedido Vacío", 
+                JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+            Pago pago = new Pago(pedidoController);
+            pago.setSize(700,550);
+            JInternalFrame internalFrame = new JInternalFrame("Pago", true, true, true, true);
+            internalFrame.setContentPane(pago.getContentPane());
+            internalFrame.pack();
+            getParent().add(internalFrame);
+            internalFrame.setVisible(true);
+            internalFrame.toFront();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, 
+                "Error al abrir Pago: " + e.getMessage(), 
+                "Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+   
    private void abrirMenuExtras() {
         try {
             MenuExtras menuExtras = new MenuExtras(pedidoController);
+            menuExtras.setSize(740, 650);
             JInternalFrame internalFrame = new JInternalFrame("Extras", true, true, true, true);
             internalFrame.setContentPane(menuExtras.getContentPane());
             internalFrame.pack();
@@ -131,6 +158,7 @@ public class Menu2 extends javax.swing.JInternalFrame{
         BtnPerso = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
+        btnPago = new javax.swing.JButton();
         LblImgaen = new javax.swing.JLabel();
         LblImgaen1 = new javax.swing.JLabel();
         LblImgaen2 = new javax.swing.JLabel();
@@ -173,6 +201,16 @@ public class Menu2 extends javax.swing.JInternalFrame{
             }
         });
         jPanel1.add(jButton4, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 140, 570, 90));
+
+        btnPago.setBackground(new java.awt.Color(255, 102, 0));
+        btnPago.setForeground(new java.awt.Color(0, 51, 153));
+        btnPago.setText("Pago");
+        btnPago.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPagoActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnPago, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 360, 150, 60));
         jPanel1.add(LblImgaen, new org.netbeans.lib.awtextra.AbsoluteConstraints(490, 0, 230, 140));
         jPanel1.add(LblImgaen1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 220, 140));
         jPanel1.add(LblImgaen2, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 270, 420, 210));
@@ -215,6 +253,14 @@ public class Menu2 extends javax.swing.JInternalFrame{
 });
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void btnPagoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPagoActionPerformed
+ btnPago.addActionListener(e -> {
+     this.setVisible(false);
+     new Pago(pedidoController).setVisible(true);
+ });
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnPagoActionPerformed
      private void showInternalFrame(JInternalFrame frame, String title) {
         JInternalFrame internalFrame = new JInternalFrame(title, true, true, true, true);
         internalFrame.setContentPane(((javax.swing.JInternalFrame)frame).getContentPane());
@@ -273,6 +319,7 @@ int opcion = JOptionPane.showConfirmDialog(
     private javax.swing.JLabel LblImgaen1;
     private javax.swing.JLabel LblImgaen2;
     private javax.swing.JLabel LblImgaen3;
+    private javax.swing.JButton btnPago;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JPanel jPanel1;

@@ -51,24 +51,38 @@ public class ClienteJinterno extends JFrame {
         setSize(1000, 700);
         setLayout(new BorderLayout(10, 10));
         
+        JPanel backgroundPanel = new JPanel(new BorderLayout()){
+          @Override
+          protected void paintComponent(Graphics g){
+              super.paintComponent(g);
+              
+                ImageIcon imageIcon =new ImageIcon(getClass().getClassLoader().getResource("Img/Fondo.jpg"));
+                Image image = imageIcon.getImage();
+                g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
+            }
+          
+        };
+        backgroundPanel.setOpaque(false);
+        
         // Panel superior con título
         JPanel panelTitulo = new JPanel();
-        panelTitulo.setBackground(COLOR_PRIMARIO);
+        panelTitulo.setBackground(new Color(204, 204, 0,150));
         panelTitulo.setBorder(BorderFactory.createEmptyBorder(15, 0, 15, 0));
         
         JLabel lblTitulo = new JLabel("SISTEMA DE GESTIÓN DE CLIENTES");
         lblTitulo.setForeground(Color.BLACK);
         lblTitulo.setFont(new Font("Segoe UI", Font.BOLD, 24));
         panelTitulo.add(lblTitulo);
-        add(panelTitulo, BorderLayout.NORTH);
+        backgroundPanel.add(panelTitulo, BorderLayout.NORTH);
         
         // Panel principal (formulario + tabla)
         JPanel panelPrincipal = new JPanel(new BorderLayout(10, 10));
+        panelPrincipal.setOpaque(false);
         panelPrincipal.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
         
         // Panel del formulario
         JPanel panelFormulario = new JPanel(new GridBagLayout());
-        panelFormulario.setBackground(COLOR_SECUNDARIO);
+        panelFormulario.setOpaque(false);
         panelFormulario.setBorder(BorderFactory.createTitledBorder("Datos del Cliente"));
         
         GridBagConstraints gbc = new GridBagConstraints();
@@ -91,7 +105,7 @@ public class ClienteJinterno extends JFrame {
         
         // Panel de botones
         JPanel panelBotones = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
-        panelBotones.setBackground(COLOR_SECUNDARIO);
+        panelBotones.setOpaque(false);
         
         btnGuardar = crearBoton("Guardar", COLOR_BOTONES, e -> guardarCliente());
         btnActualizar = crearBoton("Actualizar", COLOR_BOTONES, e -> actualizarCliente());
@@ -117,6 +131,7 @@ public class ClienteJinterno extends JFrame {
         
         // Panel de la tabla
         panelTabla = new JPanel(new BorderLayout());
+        panelTabla.setOpaque(false);
         panelTabla.setBorder(BorderFactory.createTitledBorder("Lista de Clientes"));
         panelTabla.setVisible(false);
         // Modelo y tabla de clientes
@@ -142,8 +157,9 @@ public class ClienteJinterno extends JFrame {
         // Agregar paneles al panel principal
         panelPrincipal.add(panelFormulario, BorderLayout.NORTH);
         panelPrincipal.add(panelTabla, BorderLayout.CENTER);
+        backgroundPanel.add(panelPrincipal,BorderLayout.CENTER);
         
-        add(panelPrincipal, BorderLayout.CENTER);
+        add(backgroundPanel);
     }
     
     private void agregarCampo(JPanel panel, GridBagConstraints gbc, int fila, String etiqueta, JTextField campo) {

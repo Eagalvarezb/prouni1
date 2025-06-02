@@ -3,10 +3,17 @@ package JFrameN;
 
 import Controlador.ProveedorControler;
 import Modelo.Proveedor;
+import java.awt.BorderLayout;
+import java.awt.Graphics;
 import java.awt.GridBagConstraints;
+import java.awt.Image;
+import java.util.List;
+import javax.swing.BorderFactory;
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
@@ -14,24 +21,35 @@ import javax.swing.table.DefaultTableModel;
 public class ProveedorJinterno extends javax.swing.JFrame {
 
     private final ProveedorControler controller;
+    private DefaultTableModel tableModel;
+    private JTable proveedoresTable;
+    private boolean tablaVisible = false;
+    private JPanel panelTabla;
+    
     
     public ProveedorJinterno() {
         this.controller = new ProveedorControler();
         initComponents();
        
         setLocationRelativeTo(null);
-    }
-    
-     
-      
-       
-       
-    
+    }       
 
     @SuppressWarnings("unchecked")
     private void initComponents() {
 
-        jPanel1 = new javax.swing.JPanel();
+        jPanel1 = new javax.swing.JPanel(){
+          @Override
+          protected void paintComponent(Graphics g){
+              super.paintComponent(g);
+              
+                ImageIcon imageIcon =new ImageIcon(getClass().getClassLoader().getResource("Img/Fondo.jpg"));
+                Image image = imageIcon.getImage();
+                g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
+            }
+          
+        };
+        jPanel1.setOpaque(false);
+        setSize(900,750);
         lblTitulo = new javax.swing.JLabel();
         lblNomProveedor = new javax.swing.JLabel();
         lblNit = new javax.swing.JLabel();
@@ -52,7 +70,25 @@ public class ProveedorJinterno extends javax.swing.JFrame {
         btnEliminar = new javax.swing.JButton();
         btnBuscar = new javax.swing.JButton();
         btnLimpiar = new javax.swing.JButton();
+        btnMostrarTodos = new javax.swing.JButton();
         btnRegresar = new javax.swing.JButton();
+        panelTabla = new JPanel(new BorderLayout());
+        panelTabla.setOpaque(false);
+        panelTabla.setBorder(BorderFactory.createTitledBorder("Lista de Proveedores"));
+        panelTabla.setVisible(false);
+               
+         String[] columnas = {"Nombre", "NIT", "Tipo Insumo", "Contacto", "Dirección", "Tel. Empresa", "Tel. Contacto"};
+        tableModel = new DefaultTableModel(columnas, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        proveedoresTable = new JTable(tableModel);
+        JScrollPane scrollPane = new JScrollPane(proveedoresTable);
+        panelTabla.add(scrollPane, BorderLayout.CENTER);
+        jPanel1.add(panelTabla, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 480, 840, 200));
+        jPanel1.add(panelTabla); 
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Gestión de Proveedores");
@@ -175,6 +211,18 @@ public class ProveedorJinterno extends javax.swing.JFrame {
             }
         });
         jPanel1.add(btnLimpiar, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 440, 100, 40));
+        
+        btnMostrarTodos.setBackground(new java.awt.Color(102, 153, 255));
+        btnMostrarTodos.setFont(new java.awt.Font("Segoe UI", 1, 12));
+        btnMostrarTodos.setForeground(new java.awt.Color(0, 0, 0));
+        btnMostrarTodos.setText("Mostrar Todos");
+        btnMostrarTodos.addActionListener(new java.awt.event.ActionListener() {
+         public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnMostrarTodosActionPerformed(evt);
+            }
+    });
+        jPanel1.add(btnMostrarTodos, new org.netbeans.lib.awtextra.AbsoluteConstraints(245, 440, 100, 40));
+
 
         btnRegresar.setBackground(new java.awt.Color(204, 153, 255));
         btnRegresar.setFont(new java.awt.Font("Segoe UI", 1, 12));
@@ -310,6 +358,34 @@ public class ProveedorJinterno extends javax.swing.JFrame {
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {
         limpiarCampos();
     }
+    
+        
+    private void  btnMostrarTodosActionPerformed(java.awt.event.ActionEvent evt){
+        tablaVisible = !tablaVisible;
+        panelTabla.setVisible(tablaVisible);
+        
+        if (tablaVisible) {
+           List<Proveedor> proveedor = controller.obtenerProveedor();
+            
+            tableModel.setRowCount(0);
+            
+            for (Proveedor prov : proveedor) {
+                Object[] fila = {
+                    prov.getNombre_pro(),
+                    prov.getNit(),
+                    prov.getTipo_insumo(),
+                    prov.getContacto(),
+                    prov.getDireccion(),
+                    prov.getTelefono_emp(),
+                    prov.getTelefono_con()
+                };
+                tableModel.addRow(fila);
+            }
+            
+            this.pack();
+            setSize(900,750);
+        }
+    }
 
     private void btnRegresarActionPerformed(java.awt.event.ActionEvent evt) {
         int opcion = JOptionPane.showConfirmDialog(
@@ -320,13 +396,8 @@ public class ProveedorJinterno extends javax.swing.JFrame {
     );
     
     if (opcion == JOptionPane.YES_OPTION) {
-        // En una aplicación real, aquí iría la lógica para volver al menú principal
-        // Por ahora simplemente cerraremos la ventana
         this.dispose();
-        
-        // Si tuvieras un menú principal, sería algo como:
-        // new MenuPrincipal().setVisible(true);
-    }
+     }
     }
 
     private void limpiarCampos() {
@@ -353,6 +424,7 @@ public class ProveedorJinterno extends javax.swing.JFrame {
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnLimpiar;
+    private javax.swing.JButton btnMostrarTodos;
     private javax.swing.JButton btnRegresar;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JLabel lblContacto;
@@ -370,5 +442,7 @@ public class ProveedorJinterno extends javax.swing.JFrame {
     private javax.swing.JTextField txtTelContacto;
     private javax.swing.JTextField txtTelEmpresa;
     private javax.swing.JTextField txtTipoInsumo;
+    
+
     // End of variables declaration
 }

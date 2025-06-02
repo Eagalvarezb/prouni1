@@ -6,7 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 public class MainMenuFrame extends JFrame {
-    // Suponiendo que tenemos información del usuario logueado
+    
     private String userRole = "admin"; // Esto debería venir de la autenticación
 
     public MainMenuFrame() {
@@ -19,15 +19,26 @@ public class MainMenuFrame extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
 
-        JPanel panel = new JPanel(new BorderLayout());
-
+        JPanel backgroundPanel= new JPanel(new BorderLayout()){
+            @Override
+            protected void paintComponent (Graphics g){
+                super.paintComponent(g);
+                ImageIcon imageIcon =new ImageIcon(getClass().getClassLoader().getResource("Img/Fondo.jpg"));
+                Image image = imageIcon.getImage();
+                g.drawImage(image, 0, 0, getWidth(), getHeight(), this);
+            }
+        };
+        backgroundPanel.setOpaque(false);
+        
         // Barra de título con información de usuario
         JLabel lblWelcome = new JLabel("Bienvenido - Rol: " + userRole, SwingConstants.CENTER);
         lblWelcome.setFont(new Font("Arial", Font.BOLD, 16));
-        panel.add(lblWelcome, BorderLayout.NORTH);
+        backgroundPanel.add(lblWelcome, BorderLayout.NORTH);
 
         // Panel de botones según rol
         JPanel buttonPanel = new JPanel(new GridLayout(0, 1, 10, 10));
+        buttonPanel.setOpaque(false);
+        buttonPanel.setBackground(new Color(255, 255, 255, 100));
         buttonPanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
 
         // Botones comunes a todos los roles
@@ -38,12 +49,7 @@ public class MainMenuFrame extends JFrame {
         // Botones según rol
         if (userRole.equals("admin")) {
             // Botones solo para admin
-           
-            JButton btnReports = new JButton("Reportes");
-            btnReports.addActionListener(e -> new ReportesJinterno().setVisible(true));
-            buttonPanel.add(btnReports);
-
-         
+                    
             JButton btnProviders = new JButton("Gestión de Proveedores");
             btnProviders.addActionListener(e -> new ProveedorJinterno().setVisible(true));
             buttonPanel.add(btnProviders);
@@ -66,12 +72,17 @@ public class MainMenuFrame extends JFrame {
 
         if (userRole.equals("admin") || userRole.equals("cashier") || userRole.equals("waiter")) {
             JButton btnMenu = new JButton("Menú");
-            btnMenu.addActionListener(e -> new Menu1_5().setVisible(true));
+            btnMenu.addActionListener(e -> new Menu().setVisible(true));
             buttonPanel.add(btnMenu);
+            
+            
         }
-
-        panel.add(new JScrollPane(buttonPanel), BorderLayout.CENTER);
-
-        add(panel);
+        
+        JScrollPane scrollPane = new JScrollPane(buttonPanel);
+        scrollPane.setOpaque(false);
+        scrollPane.getViewport().setOpaque(false);
+        scrollPane.setBorder(BorderFactory.createEmptyBorder());
+        backgroundPanel.add(scrollPane, BorderLayout.CENTER);
+        add(backgroundPanel);
     }
 }

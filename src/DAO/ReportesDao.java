@@ -44,7 +44,7 @@ public class ReportesDao {
     private final CreateConection connFactory = new CreateConection();
     
      public boolean CrearR(Reportes re) {
-        String sql = "INSERT INTO  public.reportes (id_venta,fecha_creacion, usuario, producto,cantidad, precio_u, total,Stock) "+
+        String sql = "INSERT INTO  public.reportes (id_v,fecha, usuario, producto,cantidad, precio_u, total,stock_actual) "+
                 "VALUES (?,CURRENT_TIMESTAMP,?,?,?,?,?,?);";
 
           
@@ -94,7 +94,7 @@ public class ReportesDao {
         re.setStock(re.getStock());
     }
        
-        String sql = "UPDATE public.reportes SET usuario=?, producto=?, cantidad=?, precio_u=?, total=?, Stock=? WHERE id_venta=?";
+        String sql = "UPDATE public.reportes_ventas SET usuario=?, producto=?, cantidad=?, precio_u=?, total=?,stock_actual=? WHERE id_v=?";
 
         try (Connection conn = connFactory.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -121,7 +121,7 @@ public class ReportesDao {
     
     public List<Reportes> PorFecha(Date fechaI, Date fechaF){
         List<Reportes> reportes = new ArrayList<>();
-        String sql = "SELECT * FROM public.reportes WHERE fecha_creacion BETWEEN ? AND ? ORDER BY fecha_creacion DESC";
+        String sql = "SELECT * FROM public.reportes_ventas WHERE fecha BETWEEN ? AND ? ORDER BY fecha DESC";
         
         try (Connection conn = connFactory.getConnection();
          PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -132,8 +132,8 @@ public class ReportesDao {
         try (ResultSet rs = ps.executeQuery()) {
             while (rs.next()) {
                 Reportes r = new Reportes();
-                //r.setId_v(rs.getInt("id_venta"));
-                r.setFecha(rs.getTimestamp("fecha_creacion"));
+                r.setId_v(rs.getInt("id_venta"));
+                r.setFecha(rs.getTimestamp("fecha"));
                 r.setUsuario(rs.getString("usuario"));
                 r.setProducto(rs.getString("producto"));
                 r.setCantidad(rs.getInt("cantidad"));
@@ -152,7 +152,7 @@ public class ReportesDao {
     
     public List<Reportes> PorUsuario(String usuario) {
         List<Reportes> reportes = new ArrayList<>();
-    String sql = "SELECT * FROM public.reportes WHERE usuario = ? ORDER BY fecha_creacion DESC";
+    String sql = "SELECT * FROM public.reportes_ventas WHERE usuario = ? ORDER BY fecha DESC";
     
     try (Connection conn = connFactory.getConnection();
          PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -163,7 +163,7 @@ public class ReportesDao {
             while (rs.next()) {
                 Reportes r = new Reportes();
                // r.setId_v(rs.getInt("id_venta"));
-                r.setFecha(rs.getTimestamp("fecha_creacion"));
+                r.setFecha(rs.getTimestamp("fecha"));
                 r.setUsuario(rs.getString("usuario"));
                 r.setProducto(rs.getString("producto"));
                 r.setCantidad(rs.getInt("cantidad"));
@@ -185,7 +185,7 @@ public class ReportesDao {
     
     public List<Reportes> PorProducto(String producto) {
     List<Reportes> reportes = new ArrayList<>();
-    String sql = "SELECT * FROM public.reportes WHERE producto = ? ORDER BY fecha_creacion DESC";    
+    String sql = "SELECT * FROM public.reportes_ventas WHERE producto = ? ORDER BY fecha DESC";    
     
     try (Connection conn = connFactory.getConnection();
          PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -197,13 +197,13 @@ public class ReportesDao {
                 Reportes r = new Reportes();
                 
                 r.setId_v(rs.getInt("id_venta"));
-                r.setFecha(rs.getTimestamp("fecha_creacion"));
+                r.setFecha(rs.getTimestamp("fecha"));
                 r.setUsuario(rs.getString("usuario"));
                 r.setProducto(rs.getString("producto"));
                 r.setCantidad(rs.getInt("cantidad"));
                 r.setPrecio_u(rs.getDouble("precio_u"));
                 r.setTotal(rs.getDouble("total"));
-                r.setStock(rs.getInt("Stock"));
+                r.setStock(rs.getInt("stock_actual"));
                 
                 ps.close();
                 conn.close();
@@ -216,9 +216,9 @@ public class ReportesDao {
     
     return reportes;
 }
-public List<Reportes> MasVendidos() {
+ public List<Reportes> MasVendidos() {
     List<Reportes> Productos = new ArrayList<>();
-    String sql = "SELECT public.producto, SUM(cantidad) AS cantidad_total FROM reportes GROUP BY producto ORDER BY cantidad_total DESC LIMIT 10";
+    String sql = "SELECT public.productos, SUM(cantidad) AS cantidad FROM reportes GROUP BY producto ORDER BY cantidad DESC LIMIT 10";
 
     try (Connection conn = connFactory.getConnection();
          PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -228,7 +228,7 @@ public List<Reportes> MasVendidos() {
         while (rs.next()) {
             Reportes r = new Reportes();
             r.setProducto(rs.getString("producto"));
-            r.setCantidad(rs.getInt("cantidad_total"));
+            r.setCantidad(rs.getInt("cantidad"));
             Productos.add(r);
         }
         rs.close();
@@ -237,8 +237,9 @@ public List<Reportes> MasVendidos() {
     }
     return Productos;
 }
+
 public double obtenerTotalVentasPorFecha(Date fechaI, Date fechaF) {
-    String sql = "SELECT SUM(total) FROM public.reportes WHERE fecha_creacion BETWEEN ? AND ?";
+    String sql = "SELECT SUM(total) FROM public.reportes_ventas WHERE fecha BETWEEN ? AND ?";
     try (Connection conn = connFactory.getConnection();
          PreparedStatement ps = conn.prepareStatement(sql)) {
         
@@ -257,7 +258,7 @@ public double obtenerTotalVentasPorFecha(Date fechaI, Date fechaF) {
 }
 
 public int obtenerTotalProductosVendidos(Date fechaI, Date fechaF) {
-    String sql = "SELECT SUM(cantidad) FROM public.reportes WHERE fecha_creacion BETWEEN ? AND ?";
+    String sql = "SELECT SUM(cantidad) FROM public.reportes_ventas WHERE fecha BETWEEN ? AND ?";
     try (Connection conn = connFactory.getConnection();
          PreparedStatement ps = conn.prepareStatement(sql)) {
         
@@ -277,7 +278,7 @@ public int obtenerTotalProductosVendidos(Date fechaI, Date fechaF) {
 
 public List<String> obtenerUsuariosActivos(Date fechaI, Date fechaF) {
     List<String> usuarios = new ArrayList<>();
-    String sql = "SELECT DISTINCT usuario FROM public.reportes WHERE fecha_creacion BETWEEN ? AND ?";
+    String sql = "SELECT DISTINCT usuario FROM public.reportes_ventas WHERE fecha BETWEEN ? AND ?";
     
     try (Connection conn = connFactory.getConnection();
          PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -297,7 +298,7 @@ public List<String> obtenerUsuariosActivos(Date fechaI, Date fechaF) {
 }
 
     public boolean eliminar(int id_v) {
-        String sql = "DELETE FROM public.reportes WHERE id_venta=?";
+        String sql = "DELETE FROM public.reportes WHERE id_v=?";
 
         try (Connection conn = connFactory.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {

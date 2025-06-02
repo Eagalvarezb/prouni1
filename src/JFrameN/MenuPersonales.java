@@ -122,6 +122,11 @@ public class MenuPersonales extends javax.swing.JInternalFrame {
         BtnAgregar.setFont(new java.awt.Font("Segoe UI Emoji", 1, 24)); // NOI18N
         BtnAgregar.setForeground(new java.awt.Color(255, 204, 0));
         BtnAgregar.setText("Agregar ");
+        BtnAgregar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnAgregarActionPerformed(evt);
+            }
+        });
         jPanel1.add(BtnAgregar, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 470, 220, 50));
         jPanel1.add(LblImgaen, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 740, 520));
 
@@ -218,6 +223,24 @@ public class MenuPersonales extends javax.swing.JInternalFrame {
     }
         // TODO add your handling code here:
     }//GEN-LAST:event_BtnRegresarActionPerformed
+
+    private void BtnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnAgregarActionPerformed
+       
+        StringBuilder resumen = new StringBuilder("Productos en tu pedido:\n");
+    for (Productos p : pedidoController.getProductosSeleccionados()) {
+        resumen.append("- ").append(p.getNombre())
+               .append(" Q").append(p.getPrecio()).append("\n");
+    }
+    resumen.append("\nTotal: Q").append(pedidoController.getTotal());
+    
+    JOptionPane.showMessageDialog(
+        this, 
+        resumen.toString(), 
+        "Resumen de Pedido", 
+        JOptionPane.INFORMATION_MESSAGE
+    );
+    // TODO add your handling code here:
+    }//GEN-LAST:event_BtnAgregarActionPerformed
 
     /**
      * @param args the command line arguments

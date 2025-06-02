@@ -62,11 +62,9 @@ public class EmpleadoJinternoMo extends javax.swing.JFrame {
         TablaEmple.setModel(modeloTabla);
         cargarEmpleado();
         jScrollPane2.setVisible(false);
-//        this.setClosable(true);
-//        this.setIconifiable(true);
-//        this.setMaximizable(true);
+
          this.setResizable(true);
-         this.setSize(900, 700);
+         this.setSize(1200, 700);
          habilitarCampos();
           this.pack();
         // Cargar imagen
@@ -191,7 +189,7 @@ public class EmpleadoJinternoMo extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(jTable1);
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(204, 204, 0));
 
@@ -210,7 +208,7 @@ public class EmpleadoJinternoMo extends javax.swing.JFrame {
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(75, 75, 75)
+                .addGap(27, 27, 27)
                 .addComponent(lblLosSeniordelTaco)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -439,7 +437,7 @@ public class EmpleadoJinternoMo extends javax.swing.JFrame {
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(txtSalario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(lblSalario))))
-                .addContainerGap(22, Short.MAX_VALUE))
+                .addContainerGap(13, Short.MAX_VALUE))
         );
 
         TablaEmple.setModel(new javax.swing.table.DefaultTableModel(
@@ -467,17 +465,17 @@ public class EmpleadoJinternoMo extends javax.swing.JFrame {
                     .addGroup(jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                         .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addContainerGap(164, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jDesktopPane1Layout.setVerticalGroup(
             jDesktopPane1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jDesktopPane1Layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(20, 20, 20)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 294, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 225, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -494,7 +492,7 @@ public class EmpleadoJinternoMo extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jDesktopPane1)
-                .addGap(45, 45, 45))
+                .addContainerGap())
         );
 
         pack();
@@ -502,6 +500,7 @@ public class EmpleadoJinternoMo extends javax.swing.JFrame {
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
       try {
+          
             int id = Integer.parseInt(txtId.getText());
             Empleado emp = controlador.obtenerPorID(id);
             if (emp != null) {
@@ -515,6 +514,7 @@ public class EmpleadoJinternoMo extends javax.swing.JFrame {
                 txtSalario.setText(String.valueOf(emp.getSalario()));
                 txtEmail.setText(emp.getEmail());
                 habilitarCampos();
+                
             } else {
                 JOptionPane.showMessageDialog(this, "Empleado no encontrado", "Error", JOptionPane.ERROR_MESSAGE);
             }
@@ -534,6 +534,7 @@ public class EmpleadoJinternoMo extends javax.swing.JFrame {
     if (tablaVisible) {
         cargarEmpleado();
     }
+    setSize(900,700);
     this.pack();
           // TODO add your handling code here:
     }//GEN-LAST:event_btnmostrarActionPerformed
@@ -582,6 +583,10 @@ public class EmpleadoJinternoMo extends javax.swing.JFrame {
                 Double.parseDouble(txtSalario.getText()),
                 txtEmail.getText()
             );
+            if (!txtTelefono.getText().trim().matches("^[0-9]{8,15}$")) {
+            JOptionPane.showMessageDialog(this, "El teléfono debe contener solo números (8-15 dígitos)", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+            }
             cargarEmpleado();
             limpiarCampos();
         } catch (NumberFormatException e) {
@@ -607,6 +612,10 @@ public class EmpleadoJinternoMo extends javax.swing.JFrame {
                     Double.parseDouble(txtSalario.getText()),
                     txtEmail.getText()
                 );
+                if (!txtTelefono.getText().trim().matches("^[0-9]{8,15}$")) {
+                JOptionPane.showMessageDialog(this, "El teléfono debe contener solo números (8-15 dígitos)", "Error", JOptionPane.ERROR_MESSAGE);
+                return;
+                }
                 limpiarCampos();
                 cargarEmpleado();
             } catch (NumberFormatException e) {
@@ -626,8 +635,6 @@ public class EmpleadoJinternoMo extends javax.swing.JFrame {
         JOptionPane.YES_NO_OPTION
     );
           if (opcion == JOptionPane.YES_OPTION) {
-        // En una aplicación real, aquí iría la lógica para volver al menú principal
-        // Por ahora simplemente cerraremos la ventana
         this.dispose();
           }
         // TODO add your handling code here:
